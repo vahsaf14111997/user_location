@@ -17,7 +17,7 @@
   </thead>
 
   <tbody>
-    <% @users.each do |user| %>
+    <% @users.includes(:place).each do |user| %>
       <tr>
         <td><%= user.id %></td>
         <td><%= user.name %></td>

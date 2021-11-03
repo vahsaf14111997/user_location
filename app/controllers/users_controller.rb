@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
-  before_action :set_place, only: %i[ show edit update destroy ]
+  # before_action :set_place, only: %i[ show edit update destroy ]
   # GET /users or /users.json
   def index
     @users = User.all
@@ -13,6 +13,7 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    @user.build_place
   end
 
   # GET /users/1/edit
@@ -25,7 +26,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        @location = Place.create(location: params[:user][:location], user_id: @user.id)
+        # @location = Place.create(location: params[:user][:location], user_id: @user.id)
         format.html { redirect_to root_path, notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
@@ -39,7 +40,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        @place.update(location: params[:user][:location])
+        # @place.update(location: params[:user][:location])
         format.html { redirect_to root_path, notice: "User was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -64,12 +65,12 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
-    def set_place
-      @place = Place.find_by(user_id: @user.id)
-    end
+    # def set_place
+    #   @place = Place.find_by(user_id: @user.id)
+    # end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :phone)
+      params.require(:user).permit(:name, :phone,:place_attributes => [:location])
     end
 end
